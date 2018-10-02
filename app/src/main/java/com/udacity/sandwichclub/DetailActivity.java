@@ -3,7 +3,6 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,8 +10,6 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
-
-import org.json.JSONException;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -23,10 +20,6 @@ public class DetailActivity extends AppCompatActivity {
     TextView placeOfOriginTextView;
     TextView descriptionTextView;
     TextView ingredientsTextView;
-    TextView knownAsLabel;
-    TextView placeOfOriginLabel;
-    TextView descriptionLabel;
-    TextView ingredientsLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +31,6 @@ public class DetailActivity extends AppCompatActivity {
         placeOfOriginTextView = findViewById(R.id.origin_tv);
         descriptionTextView = findViewById(R.id.description_tv);
         ingredientsTextView = findViewById(R.id.ingredients_tv);
-        knownAsLabel = findViewById(R.id.also_known_label);
-        placeOfOriginLabel = findViewById(R.id.place_of_origin_label);
-        descriptionLabel = findViewById(R.id.description_label);
-        ingredientsLabel = findViewById(R.id.ingredients_label);
 
 
         Intent intent = getIntent();
@@ -69,6 +58,8 @@ public class DetailActivity extends AppCompatActivity {
         populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
+                .placeholder(R.drawable.sandwich_icon)
+                .error(R.drawable.sandwich_icon)
                 .into(ingredientsIv);
 
         setTitle(sandwich.getMainName());
@@ -90,20 +81,17 @@ public class DetailActivity extends AppCompatActivity {
             }
             knownAsTextView.setText(stringBuilder.toString());
         } else {
-            knownAsTextView.setVisibility(View.GONE);
-            knownAsLabel.setVisibility(View.GONE);
+            knownAsTextView.setText(R.string.detail_error_message);
         }
         if (!sandwich.getPlaceOfOrigin().isEmpty()) {
             placeOfOriginTextView.setText(sandwich.getPlaceOfOrigin());
         } else {
-            placeOfOriginTextView.setVisibility(View.GONE);
-            placeOfOriginLabel.setVisibility(View.GONE);
+            placeOfOriginTextView.setText(R.string.detail_error_message);
         }
         if (!sandwich.getDescription().isEmpty()) {
             descriptionTextView.setText(sandwich.getDescription());
         } else {
-            descriptionTextView.setVisibility(View.GONE);
-            descriptionLabel.setVisibility(View.GONE);
+            descriptionTextView.setText(R.string.detail_error_message);
         }
         if (sandwich.getIngredients() != null && sandwich.getIngredients().size() > 0) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -115,8 +103,7 @@ public class DetailActivity extends AppCompatActivity {
             }
             ingredientsTextView.setText(stringBuilder.toString());
         } else {
-            ingredientsTextView.setVisibility(View.GONE);
-            ingredientsLabel.setVisibility(View.GONE);
+            ingredientsTextView.setText(R.string.detail_error_message);
         }
 
     }

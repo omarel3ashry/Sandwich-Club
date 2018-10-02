@@ -14,24 +14,32 @@ import java.util.List;
 public class JsonUtils {
 
     private final static String TAG = JsonUtils.class.getSimpleName();
+    private final static String NAME = "name";
+    private final static String MAIN_NAME = "mainName";
+    private final static String ALSO_KNOWN_AS = "alsoKnownAs";
+    private final static String PLACE_OF_ORIGIN = "placeOfOrigin";
+    private final static String DESCRIPTION = "description";
+    private final static String IMAGE = "image";
+    private final static String INGREDIENTS = "ingredients";
+
 
     public static Sandwich parseSandwichJson(String json) {
         try {
             JSONObject sandwich_details = new JSONObject(json);
-            JSONObject name = sandwich_details.getJSONObject("name");
-            String mainName = name.getString("mainName");
-            JSONArray alsoKnownAs = name.getJSONArray("alsoKnownAs");
+            JSONObject name = sandwich_details.optJSONObject(NAME);
+            String mainName = name.optString(MAIN_NAME);
+            JSONArray alsoKnownAs = name.optJSONArray(ALSO_KNOWN_AS);
             List<String> alsoKnownAsList = new ArrayList<>();
             for (int i = 0; i < alsoKnownAs.length(); i++) {
-                alsoKnownAsList.add(alsoKnownAs.getString(i));
+                alsoKnownAsList.add(alsoKnownAs.optString(i));
             }
-            String placeOfOrigin = sandwich_details.getString("placeOfOrigin");
-            String description = sandwich_details.getString("description");
-            String image = sandwich_details.getString("image");
-            JSONArray ingredients = sandwich_details.getJSONArray("ingredients");
+            String placeOfOrigin = sandwich_details.optString(PLACE_OF_ORIGIN);
+            String description = sandwich_details.optString(DESCRIPTION);
+            String image = sandwich_details.optString(IMAGE);
+            JSONArray ingredients = sandwich_details.optJSONArray(INGREDIENTS);
             List<String> ingredientsList = new ArrayList<>();
             for (int i = 0; i < ingredients.length(); i++) {
-                alsoKnownAsList.add(ingredients.getString(i));
+                ingredientsList.add(ingredients.optString(i));
             }
             return new Sandwich(mainName, alsoKnownAsList, placeOfOrigin, description, image, ingredientsList);
 
